@@ -38,6 +38,7 @@ function get_version( req, res)
 
 function list_users( req, res) 
 {
+	// console.log(g_users)
 	res.send(  JSON.stringify( g_users) );   
 }
 
@@ -152,6 +153,18 @@ function update_user( req, res )
 	res.send(  JSON.stringify( {user}) );   
 }
 
+
+
+function approve_user(req, res)
+{
+	// list of users to approve
+	// run over the list and find the user with the id 
+	// approve him
+	console.log(req.body.id)
+	res.send(  JSON.stringify( "Hello world") );
+}
+
+
 // Routing
 const router = express.Router();
 
@@ -161,6 +174,8 @@ router.post('/users', (req, res) => { create_user(req, res )  } )
 router.put('/user/(:id)', (req, res) => { update_user(req, res )  } )
 router.get('/user/(:id)', (req, res) => { get_user(req, res )  })
 router.delete('/user/(:id)', (req, res) => { delete_user(req, res )  })
+
+router.post('/approve', (req, res) => { approve_user(req, res )  } )
 
 app.use('/api',router)
 
