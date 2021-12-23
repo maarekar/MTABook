@@ -44,8 +44,8 @@ function Post(message, id, date) {
 	this.date = date;
 }
 
-// Tables
-const g_users = [{ id: 1, name: 'Root' }];
+// Tabl
+const g_users = [new User("Root", 1 , "admin@admin.com", "admin" , new Date(), "actived")];
 const g_messages = [];
 const g_posts = [];
 const g_status = ["created", "actived", "suspended", "deleted"];
@@ -103,8 +103,42 @@ function delete_user(req, res) {
 }
 
 
-function sign_in(req, res) {
-	const name = req.body.name;
+function log_in(req, res) {
+	const email = req.body.email;
+	const password = req.body.password;
+
+	const currUser = g_users.find(user => user.email == email);
+
+	if (currUser) {
+		bcrypt.compare(password, currUser.password, function (err, result) {
+			if(result === true){
+				//get a token and send it instead of sending current user
+				res.send(JSON.stringify(currUser));
+			}
+			else{
+				res.send("Wrong password");
+				return;
+			}
+		});
+	}
+	else{
+		res.send("Didnt find user");
+		return;
+	}
+
+}
+
+
+function log_out(req, res) {
+
+}
+
+
+
+function register(req, res) {
+	const name = req.body.name; 
+	const email = req.body.email;
+	const password = req.body.password;
 
 	if (!name) {
 		res.status(StatusCodes.BAD_REQUEST);
@@ -112,50 +146,27 @@ function sign_in(req, res) {
 		return;
 	}
 
+	if (g_users.find(user => user.email === email)) {
+		res.status(StatusCodes.BAD_REQUEST);
+		res.send("Email already exists")
+		return;
+	}
 
 	// Find max id 
 	let max_id = 0;
 	g_users.forEach(
 		item => { max_id = Math.max(max_id, item.id) }
 	)
-
-	if (check_email(req.body.email)) {
-		res.status(StatusCodes.BAD_REQUEST);
-		res.send("This email is already existing")
-		return;
-	}
-
+	
 	const new_id = max_id + 1;
-	bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
-		g_users.push(new User(name, new_id, req.body.email, hash, new Date(), "created"));
-		console.log(g_users[g_users.length - 1])
+	bcrypt.hash(password, saltRounds, function (err, hash) {
+		const newUser = new User(name, new_id, email, hash, new Date(), "created");
+		g_users.push(newUser);
 	});
 
-	// Ww have a problem with async here !!!!!!!! 
-	console.log(g_users);
-
-	res.send(JSON.stringify(g_users[g_users.length - 1]));
+	res.send(JSON.stringify(g_users));
 }
 
-function check_email(email) {
-	check = false;
-	// try to make it with arrrow function
-	for (let i = 0; i < g_users.length; i++) {
-		if (g_users[i].email == email) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-function log_in(req, res) {
-
-}
-
-function log_out(req, res) {
-
-}
 
 function approve_user(req, res) {
 	const id = parseInt(req.params.id);
@@ -281,7 +292,8 @@ router.put('/user/(:id)', (req, res) => { update_user(req, res) })
 router.get('/user/(:id)', (req, res) => { get_user(req, res) })
 router.delete('/user/(:id)', (req, res) => { delete_user(req, res) })
 
-router.post('/sign', (req, res) => { sign_in(req, res) })
+router.post('/login', (req, res) => { log_in(req, res) })
+router.post('/register', async (req, res) => { register(req, res)})
 router.post('/approve', (req, res) => { approve_user(req, res) })
 router.put('/suspend/(:id)', (req, res) => { suspend_user(req, res) })
 
