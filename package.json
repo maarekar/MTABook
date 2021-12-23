@@ -2,6 +2,7 @@
   "version": "0.0.001",
   "description": "JavaScript Course API Sample",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "express": "^4.17.1",
     "http-status-codes": "^2.1.4",
     "request": "^2.88.2"
