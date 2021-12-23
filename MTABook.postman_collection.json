@@ -129,7 +129,7 @@
 	"variable": [
 		{
 			"key": "API_SERVER",
-			"value": "http://localhost:5001"
+			"value": "http://localhost:2718"
 		}
 	]
 }
