@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f0dcbb03-ce3c-4252-9566-8c0426934db8",
+		"_postman_id": "bf7a5ee5-6015-4504-a526-5538659e90a2",
 		"name": "MTABook",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -103,23 +103,6 @@
 			"response": []
 		},
 		{
-			"name": "Suspend",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"url": {
-					"raw": "{{API_SERVER}}suspend/2",
-					"host": [
-						"{{API_SERVER}}suspend"
-					],
-					"path": [
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Register",
 			"request": {
 				"auth": {
@@ -142,6 +125,41 @@
 						"{{API_SERVER}}register"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Suspend",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}suspend/2",
+					"host": [
+						"{{API_SERVER}}suspend"
+					],
+					"path": [
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Publish",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
 			},
 			"response": []
 		}

@@ -2,6 +2,7 @@
 const express = require('express')
 const StatusCodes = require('http-status-codes').StatusCodes;
 const package = require('./package.json');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -107,21 +108,26 @@ function log_in(req, res) {
 	const email = req.body.email;
 	const password = req.body.password;
 
-	const currUser = g_users.find(user => user.email == email);
+	const current_user = g_users.find(user => user.email == email);
 
-	if (currUser) {
-		bcrypt.compare(password, currUser.password, function (err, result) {
-			if(result === true){
+	if (current_user) {
+		bcrypt.compare(password, current_user.password, function (err, result) {
+			if(result){
 				//get a token and send it instead of sending current user
-				res.send(JSON.stringify(currUser));
+				const token = jwt.sign({current_user}, 'my_secret_key', {expiresIn: 60*10});
+				res.send(JSON.stringify({"token": token}));
 			}
 			else{
+				// really bad request?
+				res.status(StatusCodes.BAD_REQUEST);
 				res.send("Wrong password");
 				return;
 			}
 		});
 	}
 	else{
+		// really bad request?
+		res.status(StatusCodes.BAD_REQUEST);
 		res.send("Didnt find user");
 		return;
 	}
@@ -130,7 +136,20 @@ function log_in(req, res) {
 
 
 function log_out(req, res) {
-
+	
+	jwt.verify(req.token, 'my_secret_key', function(err, result){
+		if(err)
+		{
+			res.status(StatusCodes.FORBIDDEN); // Forbidden
+			res.send("No access")
+			return;
+		}
+		else
+		{
+			res.cookie('jwt', '', { maxAge : 1});
+	res.send(JSON.stringify("Log out succesfuly !"));
+		}
+	});
 }
 
 
@@ -270,6 +289,18 @@ function delete_post(req, res) {
 
 function publish_post(req, res) 
 { 
+	jwt.verify(req.token, 'my_secret_key', function(err, result){
+		if(err)
+		{
+			res.status(StatusCodes.FORBIDDEN); // Forbidden
+			res.send("No access")
+			return;
+		}
+		else
+		{
+			res.send(JSON.stringify(result));
+		}
+	});
 
 }
 
@@ -282,6 +313,28 @@ function delete_post(req, res)
 
 }
 
+// Verify Token
+function verifyToken(req, res, next) {
+	// Get auth header value
+	const bearerHeader = req.headers['authorization'];
+	// Check if bearer is undefined
+	if(typeof bearerHeader !== 'undefined') {
+	  // Split at the space
+	  const bearer = bearerHeader.split(' ');
+	  // Get token from array
+	  const bearerToken = bearer[1];
+	  // Set the token
+	  req.token = bearerToken;
+	  // Next middleware
+	  next();
+	} else {
+	  // Forbidden
+	  res.sendStatus(403);
+	}
+  
+}
+  
+
 // Routing
 const router = express.Router();
 
@@ -293,9 +346,11 @@ router.get('/user/(:id)', (req, res) => { get_user(req, res) })
 router.delete('/user/(:id)', (req, res) => { delete_user(req, res) })
 
 router.post('/login', (req, res) => { log_in(req, res) })
+router.delete('/logout', verifyToken, (req, res) => { log_out(req, res) })
 router.post('/register', async (req, res) => { register(req, res)})
 router.post('/approve', (req, res) => { approve_user(req, res) })
 router.put('/suspend/(:id)', (req, res) => { suspend_user(req, res) })
+router.post('/publish', verifyToken, (req, res) => { publish_post(req, res) })
 
 
 app.use('/api', router)
