@@ -1,3 +1,4 @@
+const StatusCodes = require('http-status-codes').StatusCodes;
 const user = require('./user.js');
 const g_messages = [];
 
@@ -31,6 +32,7 @@ function send_message(req, res) {
 		res.send("No such friend")
 		return;
 	}
+    // check if friend is deleted !!!!!!!!!!!!
 
 	// Find max id 
 	let max_id = 0;
