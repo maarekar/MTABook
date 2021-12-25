@@ -1,3 +1,4 @@
+const StatusCodes = require('http-status-codes').StatusCodes;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -53,22 +54,8 @@ function log_in(req, res) {
 }
 
 function log_out(req, res) {
-
-	jwt.verify(req.token, 'my_secret_key', function (err, result) {
-		if (err) {
-			res.status(StatusCodes.FORBIDDEN); // Forbidden
-			res.send("No access")
-			return;
-		}
-		else {
-			// const current_user = result.current_user;
-			// console.log(current_user);
-			// res.cookie('jwt', '', { maxAge : 1});
-			// const token = jwt.sign({current_user}, 'my_secret_key', {expiresIn: 1});
-			g_tokens[req.token] = false;
-			res.send(JSON.stringify("Log out succesfuly !"));
-		}
-	});
+	g_tokens[req.token] = false;
+	res.send(JSON.stringify("Log out succesfuly !"));
 }
 
 function register(req, res) {

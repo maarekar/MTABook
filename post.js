@@ -1,3 +1,4 @@
+const StatusCodes = require('http-status-codes').StatusCodes;
 const g_posts = []
 
 function Post(message, id, date, user_id) {
