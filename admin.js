@@ -39,9 +39,10 @@ function delete_user_by_admin(req, res) {
 			return;
 		}
 
-		//users.g_tokens[req.token] = false;  --------------------------------------> cant shut down user session beacuse we have admin token
+		
 		const curr_user = users.g_users[idx];
 		users.g_users.splice(idx, 1);
+		users.g_tokens[users.g_id_to_tokens[curr_user.id]] = false;
 		res.send("The following user has deleted: " + JSON.stringify({ curr_user }));
 	}
 	else {
@@ -164,6 +165,7 @@ function suspend_user(req, res) {
 	}
 
 	const curr_user = users.g_users[idx];
+	users.g_tokens[users.g_id_to_tokens[curr_user.id]] = false;
 	res.send("The following user has suspended: " + JSON.stringify({ curr_user }));
 }
 

@@ -15,6 +15,7 @@ function User(name, id, email, password, date, status) {
 
 const g_users = [new User("Root", 1, "admin@admin.com", "$2b$10$.7Z.3eaA9pb2o9bV5iGrEuGLeODGQVJGU.aHvq7YLUo1jXrOc0uu2", new Date(), "actived")];
 const g_tokens = [];
+const g_id_to_tokens = [];
 
 
 function log_in(req, res) {
@@ -22,6 +23,12 @@ function log_in(req, res) {
 	const password = req.body.password;
 
 	const current_user = g_users.find(user => user.email == email);
+
+	if (!current_user) {
+		res.status(StatusCodes.BAD_REQUEST);
+		res.send("Didn't find user");
+		return;
+	}
 
 	if (current_user.status != correct_status) {
 		let message;
@@ -36,17 +43,12 @@ function log_in(req, res) {
 		return;
 	}
 
-	if (!current_user) {
-		res.status(StatusCodes.BAD_REQUEST);
-		res.send("Didnt find user");
-		return;
-	}
-
 	bcrypt.compare(password, current_user.password, function (err, result) {
 		if (result) {
 			//get a token and send it instead of sending current user
 			const token = jwt.sign({ current_user }, 'my_secret_key', { expiresIn: 60 * 10 });
 			g_tokens[token] = true;
+			g_id_to_tokens[current_user.id] = token;
 			res.send(JSON.stringify({ "token": token }));
 		}
 		else {
@@ -129,20 +131,22 @@ function check_validation_token(req, res, next) {
 		}
 		else {
 			if (g_tokens[req.token]) {
+				console.log(g_tokens)
+				console.log(g_id_to_tokens)
 				req.body.user = result.current_user;
-				if (g_users[req.body.user.id - 1].status != correct_status) {
-					res.status(StatusCodes.FORBIDDEN); // Forbidden
-					res.send("No access")
-					return;
-				}
+				// if (g_users[req.body.user.id - 1].status != correct_status) {
+				// 	res.status(StatusCodes.FORBIDDEN); // Forbidden
+				// 	res.send("No access")
+				// 	return;
+				// }
 				next();
 			}
 			else {
-				res.send(JSON.stringify("You have to log in !"));
+				res.send(JSON.stringify("No access"));
 			}
 
 		}
 	});
 }
 
-module.exports = { g_users, g_tokens, verifyToken, check_validation_token, log_in, log_out, register };
+module.exports = { g_users, g_tokens, g_id_to_tokens, verifyToken, check_validation_token, log_in, log_out, register };
