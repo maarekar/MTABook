@@ -7,7 +7,6 @@ const admin = require('./admin.js');
 const user = require('./user.js');
 
 
-
 const app = express()
 let port = 2718;
 

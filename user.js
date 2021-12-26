@@ -1,3 +1,4 @@
+const fs = require("fs").promises;
 const StatusCodes = require('http-status-codes').StatusCodes;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -13,15 +14,50 @@ function User(name, id, email, password, date, status) {
 	this.status = status;
 }
 
-const g_users = [new User("Root", 1, "admin@admin.com", "$2b$10$.7Z.3eaA9pb2o9bV5iGrEuGLeODGQVJGU.aHvq7YLUo1jXrOc0uu2", new Date(), "actived")];
+const g_users = [];
 const g_tokens = [];
 const g_id_to_tokens = [];
+const users_file = './files/users.json';
+
+
+async function exists( path )
+{
+    try {
+        const stat = await fs.stat( path )
+        return true;
+    }
+    catch( e )
+    {
+        return false;
+    }    
+}
+
+
+async function read_users()
+{
+	if ( !( await exists(  users_file )))
+    {
+        console.log( `Unable to access ${users_file}`)
+        return;
+    }
+
+    const users_data = await fs.readFile(users_file);
+	const user_arr = JSON.parse(users_data);
+
+	for(var i in user_arr){
+		g_users.push(user_arr[i]);
+	}
+}
+
+read_users().then(
+    () => {console.log( 'Done reading users')}
+).catch( reason => console.log('Failure:' + reason) )
 
 
 function log_in(req, res) {
 	const email = req.body.email;
 	const password = req.body.password;
-
+	
 	const current_user = g_users.find(user => user.email == email);
 
 	if (!current_user) {
@@ -97,6 +133,11 @@ function register(req, res) {
 	bcrypt.hash(password, saltRounds, function (err, hash) {
 		const newUser = new User(name, new_id, email, hash, new Date(), "created");
 		g_users.push(newUser);
+
+		fs.writeFile(users_file, JSON.stringify(g_users), function(err) {
+			if (err) throw err;
+			console.log('complete');
+			});	
 	});
 
 	res.send(JSON.stringify(g_users));
@@ -124,6 +165,8 @@ function verifyToken(req, res, next) {
 
 function check_validation_token(req, res, next) {
 	jwt.verify(req.token, 'my_secret_key', function (err, result) {
+		console.log(req.token);
+		console.log(g_tokens[req.token]); // <<------------------------------------- when we approve the second user in a session this value is undefined
 		if (err) {
 			res.status(StatusCodes.FORBIDDEN); // Forbidden
 			res.send("No access")
@@ -142,7 +185,7 @@ function check_validation_token(req, res, next) {
 				next();
 			}
 			else {
-				res.send(JSON.stringify("No access"));
+				res.send(JSON.stringify("No access (BUG ! - maybe the token get refresh so he come to here))"));
 			}
 
 		}

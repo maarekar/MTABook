@@ -1,7 +1,9 @@
+const fs = require("fs").promises;
 const StatusCodes = require('http-status-codes').StatusCodes;
 const user = require('./user.js');
 const g_messages = [];
 const everyone = "everyone";
+const messages_file = './files/messages.json';
 
 function Message(message, id, date, from, to) {
 	this.message = message;
@@ -10,6 +12,41 @@ function Message(message, id, date, from, to) {
 	this.from = from;
 	this.to = to;
 }
+
+
+async function exists( path )
+{
+    try {
+        const stat = await fs.stat( path )
+        return true;
+    }
+    catch( e )
+    {
+        return false;
+    }    
+}
+
+
+async function read_messages()
+{
+    
+    if ( !( await exists(  messages_file )))
+    {
+        console.log( `Unable to access ${messages_file}`)
+        return;
+    }
+
+    const messages_data = await fs.readFile(  messages_file);
+    //await fs.writeFile( output_file, messages_data )
+}
+
+
+read_messages().then(
+    () => {console.log( 'Done reading messages')}
+).catch( reason => console.log('Failure:' + reason) )
+
+
+
 
 function send_message(req, res) {
 	const text = req.body.text;

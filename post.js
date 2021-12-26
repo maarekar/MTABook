@@ -1,5 +1,7 @@
+const fs = require("fs").promises;
 const StatusCodes = require('http-status-codes').StatusCodes;
 const g_posts = []
+const posts_file = './files/posts.json';
 
 function Post(message, id, date, user_id) {
 	this.message = message;
@@ -8,6 +10,39 @@ function Post(message, id, date, user_id) {
 	this.user_id = user_id;
 	this.status = 'published';
 }
+
+
+async function exists( path )
+{
+    try {
+        const stat = await fs.stat( path )
+        return true;
+    }
+    catch( e )
+    {
+        return false;
+    }    
+}
+
+
+async function read_posts()
+{
+    
+	if ( !( await exists(  posts_file )))
+    {
+        console.log( `Unable to access ${posts_file}`)
+        return;
+    }
+
+    const posts_data = await fs.readFile(  posts_file);
+    //await fs.writeFile( output_file, posts_data )
+}
+
+read_posts().then(
+    () => {console.log( 'Done reading posts')}
+).catch( reason => console.log('Failure:' + reason) )
+
+
 
 function publish_post(req, res) {
 	const text = req.body.text;
