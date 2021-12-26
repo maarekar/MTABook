@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "bf7a5ee5-6015-4504-a526-5538659e90a2",
+		"_postman_id": "e2547037-e412-4b83-808f-94134d3e2260",
 		"name": "MTABook",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -14,114 +14,6 @@
 					"raw": "{{API_SERVER}}users",
 					"host": [
 						"{{API_SERVER}}users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Approve",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"id\": 3}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{API_SERVER}}approve",
-					"host": [
-						"{{API_SERVER}}approve"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Login Shai",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = pm.response.json();",
-							"pm.collectionVariables.set(\"token_shai\", jsonData.token);",
-							"",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\": \"shai@gmail.com\",\n    \"password\" : \"shailevi\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{API_SERVER}}login",
-					"host": [
-						"{{API_SERVER}}login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Login Arnnaud",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = pm.response.json();",
-							"pm.collectionVariables.set(\"token_arnaud\", jsonData.token);"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\": \"arnaud@gmail.com\",\n    \"password\" : \"arnaudmaarek\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{API_SERVER}}login",
-					"host": [
-						"{{API_SERVER}}login"
 					]
 				}
 			},
@@ -180,7 +72,158 @@
 			"response": []
 		},
 		{
-			"name": "Suspend",
+			"name": "Login Shai",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"token_shai\", jsonData.token);",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"shai@gmail.com\",\n    \"password\" : \"shailevi\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_SERVER}}login",
+					"host": [
+						"{{API_SERVER}}login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Arnaud",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"token_arnaud\", jsonData.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"arnaud@gmail.com\",\n    \"password\" : \"arnaudmaarek\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_SERVER}}login",
+					"host": [
+						"{{API_SERVER}}login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"token_admin\", jsonData.token);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"admin@admin.com\",\r\n    \"password\" : \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_SERVER}}login",
+					"host": [
+						"{{API_SERVER}}login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try Approve By User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_shai}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}approve/2",
+					"host": [
+						"{{API_SERVER}}approve"
+					],
+					"path": [
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try Suspend By User",
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -197,7 +240,105 @@
 			"response": []
 		},
 		{
-			"name": "Publish Shai",
+			"name": "Try Restore By User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_shai}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}restore/2",
+					"host": [
+						"{{API_SERVER}}restore"
+					],
+					"path": [
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Approve By Admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}approve/2",
+					"host": [
+						"{{API_SERVER}}approve"
+					],
+					"path": [
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Suspend By Admin",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}suspend/2",
+					"host": [
+						"{{API_SERVER}}suspend"
+					],
+					"path": [
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Restore By Admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}restore/2",
+					"host": [
+						"{{API_SERVER}}restore"
+					],
+					"path": [
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Publish Post By Shai",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -326,6 +467,72 @@
 			"response": []
 		},
 		{
+			"name": "Delete User By Admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\" : 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_SERVER}}delete_user_by_admin",
+					"host": [
+						"{{API_SERVER}}delete_user_by_admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User By Himself",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_shai}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_SERVER}}delete_user",
+					"host": [
+						"{{API_SERVER}}delete_user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get messages of Arnaud",
 			"request": {
 				"auth": {
@@ -421,10 +628,10 @@
 	"variable": [
 		{
 			"key": "API_SERVER",
-			"value": "http://localhost:2718"
+			"value": "http://localhost:2718/api/"
 		},
 		{
-			"key": "token",
+			"key": "token_admin",
 			"value": ""
 		},
 		{

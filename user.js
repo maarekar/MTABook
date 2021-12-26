@@ -13,12 +13,9 @@ function User(name, id, email, password, date, status) {
 }
 
 const g_users = [new User("Root", 1, "admin@admin.com", "admin", new Date(), "actived")];
-
-const g_status = ["created", "actived", "suspended", "deleted"];
 const g_tokens = [];
 
 function list_users(req, res) {
-	// console.log(g_users)
 	res.send(JSON.stringify(g_users));
 }
 
@@ -28,7 +25,14 @@ function log_in(req, res) {
 
 	const current_user = g_users.find(user => user.email == email);
 
-	if (current_user) {
+	if (!current_user){
+		res.status(StatusCodes.BAD_REQUEST);
+		res.send("Didnt find user");
+		return;
+	}
+
+	if(current_user.status != "suspended")
+	{
 		bcrypt.compare(password, current_user.password, function (err, result) {
 			if (result) {
 				//get a token and send it instead of sending current user
@@ -36,26 +40,37 @@ function log_in(req, res) {
 				g_tokens[token] = true;
 				res.send(JSON.stringify({ "token": token }));
 			}
+			else if(current_user.id == 1){
+				if(password == "admin"){
+					const token = jwt.sign({ current_user }, 'my_secret_key', { expiresIn: 60 * 10 });
+					g_tokens[token] = true;
+					res.send(JSON.stringify({ "token": token }));
+				}
+			}
 			else {
-				// really bad request?
 				res.status(StatusCodes.BAD_REQUEST);
 				res.send("Wrong password");
 				return;
 			}
 		});
 	}
-	else {
-		// really bad request?
+	else{
 		res.status(StatusCodes.BAD_REQUEST);
-		res.send("Didnt find user");
+		res.send("You are suspended for violating terms, please contact the developers");
 		return;
 	}
 
 }
 
 function log_out(req, res) {
+	const user_email = req.body.user.email;
 	g_tokens[req.token] = false;
-	res.send(JSON.stringify("Log out succesfuly !"));
+	if (g_users.find(user => user.email === user_email)) {
+		res.send(JSON.stringify("Log out succesfuly !"));
+	}
+	else{
+		res.send(JSON.stringify("User not logged in, cant logout"));
+	}
 }
 
 function register(req, res) {
@@ -130,4 +145,4 @@ function check_validation_token(req, res, next) {
 	});
 }
 
-module.exports = {g_users, verifyToken, check_validation_token, list_users, log_in, log_out, register};
+module.exports = {g_users, g_tokens, verifyToken, check_validation_token, list_users, log_in, log_out, register};
