@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e2547037-e412-4b83-808f-94134d3e2260",
+		"_postman_id": "a2098cdb-ece0-4bfb-a76f-af94e4909589",
 		"name": "MTABook",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -267,7 +267,7 @@
 			"response": []
 		},
 		{
-			"name": "Approve By Admin",
+			"name": "Approve By Admin id=2",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -288,6 +288,33 @@
 					],
 					"path": [
 						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Approve By Admin id=3",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}approve/3",
+					"host": [
+						"{{API_SERVER}}approve"
+					],
+					"path": [
+						"3"
 					]
 				}
 			},
@@ -388,6 +415,39 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"text\" : \"hi friend\",\n    \"friend_id\" : 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_SERVER}}send_message",
+					"host": [
+						"{{API_SERVER}}send_message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send message Admin to Everyone",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\" : \"hi friend\",\n    \"friend_id\" : \"everyone\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
