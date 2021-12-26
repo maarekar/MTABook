@@ -2,6 +2,7 @@ const StatusCodes = require('http-status-codes').StatusCodes;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const correct_status = "actived";
 
 function User(name, id, email, password, date, status) {
 	this.name = name;
@@ -12,12 +13,9 @@ function User(name, id, email, password, date, status) {
 	this.status = status;
 }
 
-const g_users = [new User("Root", 1, "admin@admin.com", "admin", new Date(), "actived")];
+const g_users = [new User("Root", 1, "admin@admin.com", "$2b$10$.7Z.3eaA9pb2o9bV5iGrEuGLeODGQVJGU.aHvq7YLUo1jXrOc0uu2", new Date(), "actived")];
 const g_tokens = [];
 
-function list_users(req, res) {
-	res.send(JSON.stringify(g_users));
-}
 
 function log_in(req, res) {
 	const email = req.body.email;
@@ -25,41 +23,38 @@ function log_in(req, res) {
 
 	const current_user = g_users.find(user => user.email == email);
 
-	if (!current_user){
+	if (current_user.status != correct_status) {
+		let message;
+		if (current_user.status == "suspended") {
+			message = "You are suspended for violating terms, please contact the developers";
+		}
+		else {
+			message = "No access";
+		}
+		res.status(StatusCodes.FORBIDDEN); // Forbidden
+		res.send(message)
+		return;
+	}
+
+	if (!current_user) {
 		res.status(StatusCodes.BAD_REQUEST);
 		res.send("Didnt find user");
 		return;
 	}
 
-	if(current_user.status != "suspended")
-	{
-		bcrypt.compare(password, current_user.password, function (err, result) {
-			if (result) {
-				//get a token and send it instead of sending current user
-				const token = jwt.sign({ current_user }, 'my_secret_key', { expiresIn: 60 * 10 });
-				g_tokens[token] = true;
-				res.send(JSON.stringify({ "token": token }));
-			}
-			else if(current_user.id == 1){
-				if(password == "admin"){
-					const token = jwt.sign({ current_user }, 'my_secret_key', { expiresIn: 60 * 10 });
-					g_tokens[token] = true;
-					res.send(JSON.stringify({ "token": token }));
-				}
-			}
-			else {
-				res.status(StatusCodes.BAD_REQUEST);
-				res.send("Wrong password");
-				return;
-			}
-		});
-	}
-	else{
-		res.status(StatusCodes.BAD_REQUEST);
-		res.send("You are suspended for violating terms, please contact the developers");
-		return;
-	}
-
+	bcrypt.compare(password, current_user.password, function (err, result) {
+		if (result) {
+			//get a token and send it instead of sending current user
+			const token = jwt.sign({ current_user }, 'my_secret_key', { expiresIn: 60 * 10 });
+			g_tokens[token] = true;
+			res.send(JSON.stringify({ "token": token }));
+		}
+		else {
+			res.status(StatusCodes.BAD_REQUEST);
+			res.send("Wrong password");
+			return;
+		}
+	});
 }
 
 function log_out(req, res) {
@@ -68,7 +63,7 @@ function log_out(req, res) {
 	if (g_users.find(user => user.email === user_email)) {
 		res.send(JSON.stringify("Log out succesfuly !"));
 	}
-	else{
+	else {
 		res.send(JSON.stringify("User not logged in, cant logout"));
 	}
 }
@@ -135,6 +130,11 @@ function check_validation_token(req, res, next) {
 		else {
 			if (g_tokens[req.token]) {
 				req.body.user = result.current_user;
+				if (g_users[req.body.user.id - 1].status != correct_status) {
+					res.status(StatusCodes.FORBIDDEN); // Forbidden
+					res.send("No access")
+					return;
+				}
 				next();
 			}
 			else {
@@ -145,4 +145,4 @@ function check_validation_token(req, res, next) {
 	});
 }
 
-module.exports = {g_users, g_tokens, verifyToken, check_validation_token, list_users, log_in, log_out, register};
+module.exports = { g_users, g_tokens, verifyToken, check_validation_token, log_in, log_out, register };
