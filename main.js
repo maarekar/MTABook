@@ -7,6 +7,7 @@ const admin = require('./admin.js');
 const user = require('./user.js');
 
 
+
 const app = express()
 let port = 2718;
 
@@ -30,7 +31,7 @@ const router = express.Router();
 router.get('/users', user.verifyToken, user.check_validation_token, (req, res) => { admin.list_users(req, res) })
 router.post('/login', (req, res) => { user.log_in(req, res) })
 router.delete('/logout', user.verifyToken, user.check_validation_token, (req, res) => { user.log_out(req, res) })
-router.post('/register', (req, res) => { user.register(req, res)})
+router.post('/register', (req, res) => { user.register(req, res) })
 router.delete('/delete_user', user.verifyToken, user.check_validation_token, (req, res) => { admin.delete_user(req, res) })
 router.delete('/delete_user_by_admin', user.verifyToken, user.check_validation_token, (req, res) => { admin.delete_user_by_admin(req, res) })
 router.put('/approve/:id', user.verifyToken, user.check_validation_token, (req, res) => { admin.approve_user(req, res) })
