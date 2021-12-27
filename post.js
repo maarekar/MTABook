@@ -1,7 +1,7 @@
-const fs = require("fs").promises;
 const StatusCodes = require('http-status-codes').StatusCodes;
 const g_posts = []
 const posts_file = './files/posts.json';
+const fs = require('./database.js');
 
 function Post(message, id, date, user_id) {
 	this.message = message;
@@ -10,37 +10,6 @@ function Post(message, id, date, user_id) {
 	this.user_id = user_id;
 	this.status = 'published';
 }
-
-
-async function exists( path )
-{
-    try {
-        const stat = await fs.stat( path )
-        return true;
-    }
-    catch( e )
-    {
-        return false;
-    }    
-}
-
-
-async function read_posts()
-{
-    
-	if ( !( await exists(  posts_file )))
-    {
-        console.log( `Unable to access ${posts_file}`)
-        return;
-    }
-
-    const posts_data = await fs.readFile(  posts_file);
-    //await fs.writeFile( output_file, posts_data )
-}
-
-read_posts().then(
-    () => {console.log( 'Done reading posts')}
-).catch( reason => console.log('Failure:' + reason) )
 
 
 
@@ -65,6 +34,8 @@ function publish_post(req, res) {
 
 		const new_post = new Post(text, new_id, new Date(), req.body.user.id);
 		g_posts.push(new_post);
+
+		fs.write_file(g_posts, posts_file);
 
 
 		res.send(JSON.stringify(new_post));
@@ -113,6 +84,7 @@ function delete_post(req, res) {
 					g_posts[i].status = "deleted";
 				}
 			}
+			fs.write_file(g_posts, posts_file);
 			res.send(JSON.stringify("You delete the post successfuly !"));
 		}
 	}
@@ -124,4 +96,4 @@ function delete_post(req, res) {
 
 }
 
-module.exports = { publish_post, get_posts, delete_post };
+module.exports = {posts_file, g_posts, publish_post, get_posts, delete_post };

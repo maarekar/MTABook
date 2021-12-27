@@ -5,10 +5,24 @@ const post = require('./post.js');
 const message = require('./message.js');
 const admin = require('./admin.js');
 const user = require('./user.js');
+const fs = require('./database.js');
+
 
 
 const app = express()
 let port = 2718;
+
+// fs.read_users().then(
+// 	() => { console.log('Done reading users') }
+// ).catch(reason => console.log('Failure:' + reason))
+
+fs.read_messages().then(
+    () => {console.log( 'Done reading messages')}
+).catch( reason => console.log('Failure:' + reason) )
+
+// fs.read_posts().then(
+//     () => {console.log( 'Done reading posts')}
+// ).catch( reason => console.log('Failure:' + reason) )
 
 
 // General app settings
@@ -27,7 +41,7 @@ app.use(express.urlencoded( // to support URL-encoded bodies
 // Routing
 const router = express.Router();
 
-router.get('/users', user.verifyToken, user.check_validation_token, (req, res) => { admin.list_users(req, res) })
+router.get('/users', user.verifyToken, user.check_validation_token, (req, res) => { user.list_users(req, res) })
 router.post('/login', (req, res) => { user.log_in(req, res) })
 router.delete('/logout', user.verifyToken, user.check_validation_token, (req, res) => { user.log_out(req, res) })
 router.post('/register', (req, res) => { user.register(req, res) })

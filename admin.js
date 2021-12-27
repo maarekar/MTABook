@@ -1,5 +1,6 @@
 const StatusCodes = require('http-status-codes').StatusCodes;
 const users = require('./user.js');
+const files = require('./database.js');
 
 function delete_user_by_admin(req, res) {
 	const id = req.body.id;
@@ -53,7 +54,7 @@ function delete_user(req, res) {
 		const curr_user = users.g_users[idx];
 		users.g_users.splice(idx, 1);
 
-		users.write_file(users.g_users);			
+		files.write_file(users.g_users, users.users_file);			
 		res.send("The following user has deleted: " + JSON.stringify({curr_user}));
 	}
 	else{
@@ -99,7 +100,7 @@ function approve_user(req, res) {
 	if (users.g_users[idx].status === curr_status) {
 		users.g_users[idx].status = new_status;
 
-		users.write_file(users.g_users);
+		files.write_file(users.g_users, users.users_file);
 	}
 	else {
 		res.status(StatusCodes.BAD_REQUEST);
@@ -148,7 +149,7 @@ function suspend_user(req, res) {
 	if (users.g_users[idx].status === curr_status) {
 		users.g_users[idx].status = new_status;
 
-		users.write_file(users.g_users);
+		files.write_file(users.g_users, users.users_file);
 	}
 	else {
 		res.status(StatusCodes.BAD_REQUEST);
@@ -159,7 +160,7 @@ function suspend_user(req, res) {
 	const curr_user = users.g_users[idx];
 	users.g_users.splice(idx, 1);
 	users.g_tokens[users.g_id_to_tokens[curr_user.id]] = false;
-	res.send("The following user has deleted: " + JSON.stringify({ curr_user }));
+	res.send("The following user has suspended: " + JSON.stringify({ curr_user }));
 
 }
 
@@ -199,7 +200,7 @@ function restore_user(req, res) {
 	if (users.g_users[idx].status === curr_status) {
 		users.g_users[idx].status = new_status;
 
-		users.write_file(users.g_users);
+		files.write_file(users.g_users, users.users_file);
 	}
 	else {
 		res.status(StatusCodes.BAD_REQUEST);

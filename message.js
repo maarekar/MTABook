@@ -1,4 +1,4 @@
-const fs = require("fs").promises;
+const files = require("./database.js");
 const StatusCodes = require('http-status-codes').StatusCodes;
 const user = require('./user.js');
 const g_messages = [];
@@ -12,39 +12,6 @@ function Message(message, id, date, from, to) {
 	this.from = from;
 	this.to = to;
 }
-
-
-async function exists( path )
-{
-    try {
-        const stat = await fs.stat( path )
-        return true;
-    }
-    catch( e )
-    {
-        return false;
-    }    
-}
-
-
-async function read_messages()
-{
-    
-    if ( !( await exists(  messages_file )))
-    {
-        console.log( `Unable to access ${messages_file}`)
-        return;
-    }
-
-    const messages_data = await fs.readFile(  messages_file);
-    //await fs.writeFile( output_file, messages_data )
-}
-
-
-read_messages().then(
-    () => {console.log( 'Done reading messages')}
-).catch( reason => console.log('Failure:' + reason) )
-
 
 
 
@@ -84,7 +51,7 @@ function send_message(req, res) {
 
 		const new_message = new Message(text, new_id, new Date(), req.body.user.id, friend_id);
 		g_messages.push(new_message);
-
+		fs.write_file(g_messages, messages_file);
 
 		res.send(JSON.stringify(new_message));
 	}
@@ -108,4 +75,4 @@ function get_messages(req, res) {
 	}
 }
 
-module.exports = { send_message, get_messages };
+module.exports = { messages_file, g_messages, send_message, get_messages };

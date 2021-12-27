@@ -1,9 +1,9 @@
-const fs = require("fs").promises;
 const StatusCodes = require('http-status-codes').StatusCodes;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const correct_status = "actived";
+const db = require('./database.js');
 
 function User(name, id, email, password, date, status) {
 	this.name = name;
@@ -19,45 +19,18 @@ const g_tokens = [];
 const g_id_to_tokens = [];
 const users_file = './files/users.json';
 
+db.read_users().then(
+	() => { console.log('Done reading users') }
+).catch(reason => console.log('Failure:' + reason))
 
-async function exists( path )
-{
-    try {
-        const stat = await fs.stat( path )
-        return true;
-    }
-    catch( e )
-    {
-        return false;
-    }    
+function list_users(req, res) {
+	res.send(JSON.stringify(g_users));
 }
-
-
-async function read_users()
-{
-	if ( !( await exists(  users_file )))
-    {
-        console.log( `Unable to access ${users_file}`)
-        return;
-    }
-
-    const users_data = await fs.readFile(users_file);
-	const user_arr = JSON.parse(users_data);
-
-	for(var i in user_arr){
-		g_users.push(user_arr[i]);
-	}
-}
-
-read_users().then(
-    () => {console.log( 'Done reading users')}
-).catch( reason => console.log('Failure:' + reason) )
-
 
 function log_in(req, res) {
 	const email = req.body.email;
 	const password = req.body.password;
-	
+
 	const current_user = g_users.find(user => user.email == email);
 
 	if (!current_user) {
@@ -134,9 +107,9 @@ function register(req, res) {
 		const newUser = new User(name, new_id, email, hash, new Date(), "created");
 		g_users.push(newUser);
 
-		write_file(g_users);
+		db.write_file(g_users, users_file);
 	});
-
+	
 	res.send(JSON.stringify(g_users));
 }
 
@@ -188,13 +161,7 @@ function check_validation_token(req, res, next) {
 	});
 }
 
-async function write_file(users)
-{
-	await fs.writeFile(users_file, JSON.stringify(users), function(err) {
-		if (err) throw err;
-		console.log('complete');
-	});	
-}
 
 
-module.exports = { g_users, g_tokens, g_id_to_tokens, write_file, verifyToken, check_validation_token, log_in, log_out, register };
+
+module.exports = {users_file, g_users, g_tokens, g_id_to_tokens, list_users, verifyToken, check_validation_token, log_in, log_out, register };
