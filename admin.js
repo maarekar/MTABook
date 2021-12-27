@@ -1,7 +1,5 @@
-const fs = require("fs").promises;
 const StatusCodes = require('http-status-codes').StatusCodes;
 const users = require('./user.js');
-const users_file = './files/users.json';
 
 function delete_user_by_admin(req, res) {
 	const id = req.body.id;
@@ -27,16 +25,11 @@ function delete_user_by_admin(req, res) {
 				return;
 			}
 
-			//users.g_tokens[req.token] = false;  --------------------------------------> cant shut down user session beacuse we have admin token
 			const curr_user = users.g_users[idx];
 			users.g_users.splice(idx, 1);
-
-			fs.writeFile(users_file, JSON.stringify(users.g_users), function(err) {
-				if (err) throw err;
-				console.log('complete');
-				});	
-
-			res.send("The following user has deleted: " + JSON.stringify({curr_user}));
+			users.g_tokens[users.g_id_to_tokens[curr_user.id]] = false;
+			res.send("The following user has deleted: " + JSON.stringify({ curr_user }));
+	
 		}
 		else{
 			res.status(StatusCodes.FORBIDDEN);
@@ -60,11 +53,7 @@ function delete_user(req, res) {
 		const curr_user = users.g_users[idx];
 		users.g_users.splice(idx, 1);
 
-		fs.writeFile(users_file, JSON.stringify(users.g_users), function(err) {
-			if (err) throw err;
-			console.log('complete');
-			});	
-			
+		users.write_file(users.g_users);			
 		res.send("The following user has deleted: " + JSON.stringify({curr_user}));
 	}
 	else{
@@ -110,10 +99,7 @@ function approve_user(req, res) {
 	if (users.g_users[idx].status === curr_status) {
 		users.g_users[idx].status = new_status;
 
-		fs.writeFile(users_file, JSON.stringify(users.g_users), function(err) {
-			if (err) throw err;
-			console.log('complete');
-			});	
+		users.write_file(users.g_users);
 	}
 	else {
 		res.status(StatusCodes.BAD_REQUEST);
@@ -162,10 +148,7 @@ function suspend_user(req, res) {
 	if (users.g_users[idx].status === curr_status) {
 		users.g_users[idx].status = new_status;
 
-		fs.writeFile(users_file, JSON.stringify(users.g_users), function(err) {
-			if (err) throw err;
-			console.log('complete');
-			});	
+		users.write_file(users.g_users);
 	}
 	else {
 		res.status(StatusCodes.BAD_REQUEST);
@@ -174,7 +157,10 @@ function suspend_user(req, res) {
 	}
 
 	const curr_user = users.g_users[idx];
-	res.send("The following user has suspended: " + JSON.stringify({curr_user}));
+	users.g_users.splice(idx, 1);
+	users.g_tokens[users.g_id_to_tokens[curr_user.id]] = false;
+	res.send("The following user has deleted: " + JSON.stringify({ curr_user }));
+
 }
 
 function restore_user(req, res) {
@@ -213,10 +199,7 @@ function restore_user(req, res) {
 	if (users.g_users[idx].status === curr_status) {
 		users.g_users[idx].status = new_status;
 
-		fs.writeFile(users_file, JSON.stringify(users.g_users), function(err) {
-			if (err) throw err;
-			console.log('complete');
-			});	
+		users.write_file(users.g_users);
 	}
 	else {
 		res.status(StatusCodes.BAD_REQUEST);
@@ -227,6 +210,7 @@ function restore_user(req, res) {
 	const curr_user = users.g_users[idx];
 	res.send("The following user has restored: " + JSON.stringify({curr_user}));
 }
+
 
 
 // export

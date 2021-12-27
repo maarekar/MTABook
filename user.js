@@ -134,10 +134,7 @@ function register(req, res) {
 		const newUser = new User(name, new_id, email, hash, new Date(), "created");
 		g_users.push(newUser);
 
-		fs.writeFile(users_file, JSON.stringify(g_users), function(err) {
-			if (err) throw err;
-			console.log('complete');
-			});	
+		write_file(g_users);
 	});
 
 	res.send(JSON.stringify(g_users));
@@ -165,8 +162,8 @@ function verifyToken(req, res, next) {
 
 function check_validation_token(req, res, next) {
 	jwt.verify(req.token, 'my_secret_key', function (err, result) {
-		console.log(req.token);
-		console.log(g_tokens[req.token]); // <<------------------------------------- when we approve the second user in a session this value is undefined
+		//console.log(req.token);
+		//console.log(g_tokens[req.token]); // <<------------------------------------- when we approve the second user in a session this value is undefined
 		if (err) {
 			res.status(StatusCodes.FORBIDDEN); // Forbidden
 			res.send("No access")
@@ -174,8 +171,6 @@ function check_validation_token(req, res, next) {
 		}
 		else {
 			if (g_tokens[req.token]) {
-				console.log(g_tokens)
-				console.log(g_id_to_tokens)
 				req.body.user = result.current_user;
 				// if (g_users[req.body.user.id - 1].status != correct_status) {
 				// 	res.status(StatusCodes.FORBIDDEN); // Forbidden
@@ -185,6 +180,7 @@ function check_validation_token(req, res, next) {
 				next();
 			}
 			else {
+				console.log(g_tokens);
 				res.send(JSON.stringify("No access (BUG ! - maybe the token get refresh so he come to here))"));
 			}
 
@@ -192,4 +188,13 @@ function check_validation_token(req, res, next) {
 	});
 }
 
-module.exports = { g_users, g_tokens, g_id_to_tokens, verifyToken, check_validation_token, log_in, log_out, register };
+async function write_file(users)
+{
+	await fs.writeFile(users_file, JSON.stringify(users), function(err) {
+		if (err) throw err;
+		console.log('complete');
+	});	
+}
+
+
+module.exports = { g_users, g_tokens, g_id_to_tokens, write_file, verifyToken, check_validation_token, log_in, log_out, register };
