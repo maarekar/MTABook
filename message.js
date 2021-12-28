@@ -1,4 +1,4 @@
-const files = require("./database.js");
+const db = require("./database.js");
 const StatusCodes = require('http-status-codes').StatusCodes;
 const user = require('./user.js');
 const g_messages = [];
@@ -13,7 +13,9 @@ function Message(message, id, date, from, to) {
 	this.to = to;
 }
 
-
+db.read_data(g_messages, messages_file).then(
+	() => { console.log('Done reading users') }
+).catch(reason => console.log('Failure:' + reason))
 
 function send_message(req, res) {
 	const text = req.body.text;
@@ -51,7 +53,7 @@ function send_message(req, res) {
 
 		const new_message = new Message(text, new_id, new Date(), req.body.user.id, friend_id);
 		g_messages.push(new_message);
-		fs.write_file(g_messages, messages_file);
+		db.write_file(g_messages, messages_file);
 
 		res.send(JSON.stringify(new_message));
 	}

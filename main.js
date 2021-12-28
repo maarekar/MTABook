@@ -7,23 +7,8 @@ const admin = require('./admin.js');
 const user = require('./user.js');
 const fs = require('./database.js');
 
-
-
 const app = express()
 let port = 2718;
-
-// fs.read_users().then(
-// 	() => { console.log('Done reading users') }
-// ).catch(reason => console.log('Failure:' + reason))
-
-fs.read_messages().then(
-    () => {console.log( 'Done reading messages')}
-).catch( reason => console.log('Failure:' + reason) )
-
-// fs.read_posts().then(
-//     () => {console.log( 'Done reading posts')}
-// ).catch( reason => console.log('Failure:' + reason) )
-
 
 // General app settings
 const set_content_type = function (req, res, next) {

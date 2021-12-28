@@ -19,7 +19,7 @@ const g_tokens = [];
 const g_id_to_tokens = [];
 const users_file = './files/users.json';
 
-db.read_users().then(
+db.read_data(g_users, users_file).then(
 	() => { console.log('Done reading users') }
 ).catch(reason => console.log('Failure:' + reason))
 
@@ -30,7 +30,6 @@ function list_users(req, res) {
 function log_in(req, res) {
 	const email = req.body.email;
 	const password = req.body.password;
-
 	const current_user = g_users.find(user => user.email == email);
 
 	if (!current_user) {
@@ -104,13 +103,14 @@ function register(req, res) {
 
 	const new_id = max_id + 1;
 	bcrypt.hash(password, saltRounds, function (err, hash) {
-		const newUser = new User(name, new_id, email, hash, new Date(), "created");
-		g_users.push(newUser);
+		const new_user = new User(name, new_id, email, hash, new Date(), "created");
+		g_users.push(new_user);
 
 		db.write_file(g_users, users_file);
+		res.send(JSON.stringify(new_user));
 	});
-	
-	res.send(JSON.stringify(g_users));
+
+
 }
 
 function verifyToken(req, res, next) {
@@ -135,8 +135,6 @@ function verifyToken(req, res, next) {
 
 function check_validation_token(req, res, next) {
 	jwt.verify(req.token, 'my_secret_key', function (err, result) {
-		//console.log(req.token);
-		//console.log(g_tokens[req.token]); // <<------------------------------------- when we approve the second user in a session this value is undefined
 		if (err) {
 			res.status(StatusCodes.FORBIDDEN); // Forbidden
 			res.send("No access")
@@ -145,15 +143,9 @@ function check_validation_token(req, res, next) {
 		else {
 			if (g_tokens[req.token]) {
 				req.body.user = result.current_user;
-				// if (g_users[req.body.user.id - 1].status != correct_status) {
-				// 	res.status(StatusCodes.FORBIDDEN); // Forbidden
-				// 	res.send("No access")
-				// 	return;
-				// }
 				next();
 			}
 			else {
-				console.log(g_tokens);
 				res.send(JSON.stringify("No access (BUG ! - maybe the token get refresh so he come to here))"));
 			}
 
@@ -164,4 +156,4 @@ function check_validation_token(req, res, next) {
 
 
 
-module.exports = {users_file, g_users, g_tokens, g_id_to_tokens, list_users, verifyToken, check_validation_token, log_in, log_out, register };
+module.exports = { users_file, g_users, g_tokens, g_id_to_tokens, list_users, verifyToken, check_validation_token, log_in, log_out, register };

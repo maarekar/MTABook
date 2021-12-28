@@ -1,7 +1,7 @@
 const StatusCodes = require('http-status-codes').StatusCodes;
 const g_posts = []
 const posts_file = './files/posts.json';
-const fs = require('./database.js');
+const db = require('./database.js');
 
 function Post(message, id, date, user_id) {
 	this.message = message;
@@ -11,6 +11,9 @@ function Post(message, id, date, user_id) {
 	this.status = 'published';
 }
 
+db.read_data(g_posts, posts_file).then(
+	() => { console.log('Done reading users') }
+).catch(reason => console.log('Failure:' + reason))
 
 
 function publish_post(req, res) {
@@ -35,7 +38,7 @@ function publish_post(req, res) {
 		const new_post = new Post(text, new_id, new Date(), req.body.user.id);
 		g_posts.push(new_post);
 
-		fs.write_file(g_posts, posts_file);
+		db.write_file(g_posts, posts_file);
 
 
 		res.send(JSON.stringify(new_post));
@@ -84,7 +87,7 @@ function delete_post(req, res) {
 					g_posts[i].status = "deleted";
 				}
 			}
-			fs.write_file(g_posts, posts_file);
+			db.write_file(g_posts, posts_file);
 			res.send(JSON.stringify("You delete the post successfuly !"));
 		}
 	}

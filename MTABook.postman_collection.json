@@ -1,26 +1,25 @@
 {
 	"info": {
-		"_postman_id": "007d9dd9-c437-447b-a821-4a009f1067c7",
+		"_postman_id": "f8b1533b-d592-42a1-b342-3e0f84ebfdfe",
 		"name": "MTABook",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "GetUserLIst",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{API_SERVER}}users",
-					"host": [
-						"{{API_SERVER}}users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Register Shai",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -47,6 +46,19 @@
 		},
 		{
 			"name": "Register Arnaud",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -72,16 +84,139 @@
 			"response": []
 		},
 		{
+			"name": "Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('success', function (){\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.collectionVariables.set(\"token_admin\", jsonData.token);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"admin@admin.com\",\r\n    \"password\" : \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_SERVER}}login",
+					"host": [
+						"{{API_SERVER}}login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Approve By Admin id=2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}approve/2",
+					"host": [
+						"{{API_SERVER}}approve"
+					],
+					"path": [
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Approve By Admin id=3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}approve/3",
+					"host": [
+						"{{API_SERVER}}approve"
+					],
+					"path": [
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Login Shai",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"var jsonData = pm.response.json();",
-							"pm.collectionVariables.set(\"token_shai\", jsonData.token);",
-							"",
-							""
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"    let jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"token_shai\", jsonData.token);",
+							"})"
 						],
 						"type": "text/javascript"
 					}
@@ -125,8 +260,11 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"var jsonData = pm.response.json();",
-							"pm.collectionVariables.set(\"token_arnaud\", jsonData.token);"
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"    let jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"token_arnaud\", jsonData.token);",
+							"})"
 						],
 						"type": "text/javascript"
 					}
@@ -164,46 +302,20 @@
 			"response": []
 		},
 		{
-			"name": "Login Admin",
+			"name": "Try Approve By User",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"var jsonData = pm.response.json();\r",
-							"pm.collectionVariables.set(\"token_admin\", jsonData.token);\r",
-							""
+							"pm.test('fail', function (){",
+							"    pm.response.to.have.status(403);",
+							"})"
 						],
 						"type": "text/javascript"
 					}
 				}
 			],
-			"request": {
-				"auth": {
-					"type": "bearer"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"admin@admin.com\",\r\n    \"password\" : \"admin\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{API_SERVER}}login",
-					"host": [
-						"{{API_SERVER}}login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Try Approve By User",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -230,7 +342,57 @@
 			"response": []
 		},
 		{
+			"name": "GetUserLIst",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}users",
+					"host": [
+						"{{API_SERVER}}users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Try Suspend By User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('fail', function (){",
+							"    pm.response.to.have.status(403);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -248,6 +410,19 @@
 		},
 		{
 			"name": "Try Restore By User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('fail', function (){",
+							"    pm.response.to.have.status(403);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -274,62 +449,31 @@
 			"response": []
 		},
 		{
-			"name": "Approve By Admin id=2",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token_admin}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [],
-				"url": {
-					"raw": "{{API_SERVER}}approve/2",
-					"host": [
-						"{{API_SERVER}}approve"
-					],
-					"path": [
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Approve By Admin id=3",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token_admin}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [],
-				"url": {
-					"raw": "{{API_SERVER}}approve/3",
-					"host": [
-						"{{API_SERVER}}approve"
-					],
-					"path": [
-						"3"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Suspend By Admin",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"url": {
@@ -346,6 +490,19 @@
 		},
 		{
 			"name": "Restore By Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -373,6 +530,19 @@
 		},
 		{
 			"name": "Publish Post By Shai",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -406,6 +576,19 @@
 		},
 		{
 			"name": "Send message Shai to Arnaud",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -439,6 +622,19 @@
 		},
 		{
 			"name": "Send message Admin to Everyone",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -472,6 +668,19 @@
 		},
 		{
 			"name": "Logout Shai",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('success', function (){",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -496,6 +705,19 @@
 		},
 		{
 			"name": "Delete Post Shai",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('fail', function (){",
+							"    pm.response.to.have.status(403);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -567,14 +789,14 @@
 			"response": []
 		},
 		{
-			"name": "Delete User By Himself",
+			"name": "Delete User By Himself Arnaud",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_shai}}",
+							"value": "{{token_arnaud}}",
 							"type": "string"
 						}
 					]
@@ -707,6 +929,14 @@
 		},
 		{
 			"key": "token_arnaud",
+			"value": ""
+		},
+		{
+			"key": "work_damn_it",
+			"value": ""
+		},
+		{
+			"key": "stam",
 			"value": ""
 		}
 	]
