@@ -1,1 +1,10 @@
-[{"name":"Admin","id":1,"email":"admin@admin.com","password":"$2b$10$.7Z.3eaA9pb2o9bV5iGrEuGLeODGQVJGU.aHvq7YLUo1jXrOc0uu2","date":"26.12.21T22:14:27.669Z","status":"actived"}]
+[
+  {
+    "name": "Admin",
+    "id": 1,
+    "email": "admin@admin.com",
+    "password": "$2b$10$.7Z.3eaA9pb2o9bV5iGrEuGLeODGQVJGU.aHvq7YLUo1jXrOc0uu2",
+    "date": "26.12.21T22:14:27.669Z",
+    "status": "actived"
+  }
+]
