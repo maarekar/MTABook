@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f8b1533b-d592-42a1-b342-3e0f84ebfdfe",
+		"_postman_id": "b00f262d-79cd-42f5-ab56-29a9cab5788f",
 		"name": "MTABook",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -12,7 +12,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
+							"pm.test('Success status 200', function (){",
 							"    pm.response.to.have.status(200);",
 							"})"
 						],
@@ -51,7 +51,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
+							"pm.test('Success status 200', function (){",
 							"    pm.response.to.have.status(200);",
 							"})"
 						],
@@ -90,7 +90,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){\r",
+							"pm.test('Success status 200', function (){\r",
 							"    pm.response.to.have.status(200);\r",
 							"    let jsonData = pm.response.json();\r",
 							"    pm.collectionVariables.set(\"token_admin\", jsonData.token);\r",
@@ -103,7 +103,14 @@
 			],
 			"request": {
 				"auth": {
-					"type": "bearer"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "POST",
 				"header": [],
@@ -132,7 +139,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
+							"pm.test('Success status 200', function (){",
 							"    pm.response.to.have.status(200);",
 							"})"
 						],
@@ -172,7 +179,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
+							"pm.test('Success status 200', function (){",
 							"    pm.response.to.have.status(200);",
 							"})"
 						],
@@ -212,7 +219,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
+							"pm.test('Success status 200', function (){",
 							"    pm.response.to.have.status(200);",
 							"    let jsonData = pm.response.json();",
 							"    pm.collectionVariables.set(\"token_shai\", jsonData.token);",
@@ -228,7 +235,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "",
+							"value": "{{token_shai}}",
 							"type": "string"
 						}
 					]
@@ -260,7 +267,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
+							"pm.test('Success status 200', function (){",
 							"    pm.response.to.have.status(200);",
 							"    let jsonData = pm.response.json();",
 							"    pm.collectionVariables.set(\"token_arnaud\", jsonData.token);",
@@ -276,7 +283,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "",
+							"value": "{{token_arnaud}}",
 							"type": "string"
 						}
 					]
@@ -308,7 +315,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('fail', function (){",
+							"pm.test('Failed Status 403', function (){",
 							"    pm.response.to.have.status(403);",
 							"})"
 						],
@@ -348,7 +355,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
+							"pm.test('Success status 200', function (){",
 							"    pm.response.to.have.status(200);",
 							"})"
 						],
@@ -385,7 +392,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('fail', function (){",
+							"pm.test('Failed Status 403', function (){",
 							"    pm.response.to.have.status(403);",
 							"})"
 						],
@@ -394,6 +401,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_shai}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"url": {
@@ -415,7 +432,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('fail', function (){",
+							"pm.test('Failed Status 403', function (){",
 							"    pm.response.to.have.status(403);",
 							"})"
 						],
@@ -455,9 +472,18 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
-							"    pm.response.to.have.status(200);",
-							"})"
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Success status 200', function (){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -495,9 +521,9 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
+							"pm.test('Success status 200', function (){",
 							"    pm.response.to.have.status(200);",
-							"})"
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -529,13 +555,61 @@
 			"response": []
 		},
 		{
+			"name": "Login Shai After Suspnesion and Restoring",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Success status 200', function (){",
+							"    pm.response.to.have.status(200);",
+							"    let jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"token_shai\", jsonData.token);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_shai}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"shai@gmail.com\",\n    \"password\" : \"shailevi\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_SERVER}}login",
+					"host": [
+						"{{API_SERVER}}login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Publish Post By Shai",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
+							"pm.test('Success status 200', function (){",
 							"    pm.response.to.have.status(200);",
 							"})"
 						],
@@ -575,13 +649,96 @@
 			"response": []
 		},
 		{
+			"name": "Publish Post By Shai 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Success status 400', function (){",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_shai}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"text\" : \"\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_SERVER}}publish",
+					"host": [
+						"{{API_SERVER}}publish"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get posts Shai",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Success status 200', function (){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_shai}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}get_posts",
+					"host": [
+						"{{API_SERVER}}get_posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Send message Shai to Arnaud",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
+							"pm.test('Success status 200', function (){",
 							"    pm.response.to.have.status(200);",
 							"})"
 						],
@@ -627,7 +784,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
+							"pm.test('Success status 200', function (){",
 							"    pm.response.to.have.status(200);",
 							"})"
 						],
@@ -650,7 +807,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"text\" : \"hi friend\",\n    \"friend_id\" : \"everyone\"\n}",
+					"raw": "{\n    \"text\" : \"hi friend I'm the admin\",\n    \"friend_id\" : \"everyone\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -667,13 +824,139 @@
 			"response": []
 		},
 		{
+			"name": "Get messages of Arnaud",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Success status 200', function (){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_arnaud}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}get_messages",
+					"host": [
+						"{{API_SERVER}}get_messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get messages of Shai",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Success status 200', function (){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_shai}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_SERVER}}get_messages",
+					"host": [
+						"{{API_SERVER}}get_messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Post Shai",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Success status 200', function (){",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_shai}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"post\" : 1 }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_SERVER}}delete_post",
+					"host": [
+						"{{API_SERVER}}delete_post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Logout Shai",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('success', function (){",
+							"pm.test('Success status 200', function (){",
 							"    pm.response.to.have.status(200);",
 							"})"
 						],
@@ -704,13 +987,13 @@
 			"response": []
 		},
 		{
-			"name": "Delete Post Shai",
+			"name": "Delete Post Shai 403",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('fail', function (){",
+							"pm.test('Failed status 403', function (){",
 							"    pm.response.to.have.status(403);",
 							"})"
 						],
@@ -757,6 +1040,19 @@
 		},
 		{
 			"name": "Delete User By Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Success status 200', function (){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -772,7 +1068,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\" : 3\r\n}",
+					"raw": "{\r\n    \"id\" : 2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -790,6 +1086,19 @@
 		},
 		{
 			"name": "Delete User By Himself Arnaud",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Success status 200', function (){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -822,7 +1131,66 @@
 			"response": []
 		},
 		{
-			"name": "Get messages of Arnaud",
+			"name": "Delete User By Admin 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Failed status 404', function (){\r",
+							"    pm.response.to.have.status(404);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\" : 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_SERVER}}delete_user_by_admin",
+					"host": [
+						"{{API_SERVER}}delete_user_by_admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User By Himself Arnaud 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Failed status 403', function (){\r",
+							"    pm.response.to.have.status(403);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -834,60 +1202,116 @@
 						}
 					]
 				},
-				"method": "GET",
+				"method": "DELETE",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{API_SERVER}}get_messages",
+					"raw": "{{API_SERVER}}delete_user",
 					"host": [
-						"{{API_SERVER}}get_messages"
+						"{{API_SERVER}}delete_user"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get messages of Shai",
+			"name": "Delete Admin by Admin 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Failed status 403', function (){\r",
+							"    pm.response.to.have.status(403);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_shai}}",
+							"value": "{{token_admin}}",
 							"type": "string"
 						}
 					]
 				},
-				"method": "GET",
+				"method": "DELETE",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{API_SERVER}}get_messages",
+					"raw": "{{API_SERVER}}delete_user",
 					"host": [
-						"{{API_SERVER}}get_messages"
+						"{{API_SERVER}}delete_user"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get posts Shai",
+			"name": "Suspend Admin By Admin 404",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Failed status 404', function (){\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_shai}}",
+							"value": "{{token_admin}}",
 							"type": "string"
 						}
 					]
 				},
-				"method": "GET",
+				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "{{API_SERVER}}get_posts",
+					"raw": "{{API_SERVER}}suspend/2",
 					"host": [
-						"{{API_SERVER}}get_posts"
+						"{{API_SERVER}}suspend"
+					],
+					"path": [
+						"2"
 					]
 				}
 			},

@@ -135,7 +135,7 @@ function suspend_user(req, res) {
 
 	if (id == 1) {
 		res.status(StatusCodes.FORBIDDEN);
-		res.send("Can't approve root user");
+		res.send("Can't suspend root user");
 		return;
 	}
 
@@ -158,7 +158,6 @@ function suspend_user(req, res) {
 	}
 
 	const curr_user = users.g_users[idx];
-	users.g_users.splice(idx, 1);
 	users.g_tokens[users.g_id_to_tokens[curr_user.id]] = false;
 	res.send("The following user has suspended: " + JSON.stringify({ curr_user }));
 
@@ -186,7 +185,7 @@ function restore_user(req, res) {
 
 	if (id == 1) {
 		res.status(StatusCodes.FORBIDDEN);
-		res.send("Can't approve root user");
+		res.send("Can't restore root user");
 		return;
 	}
 

@@ -146,7 +146,9 @@ function check_validation_token(req, res, next) {
 				next();
 			}
 			else {
-				res.send(JSON.stringify("No access (BUG ! - maybe the token get refresh so he come to here))"));
+				res.status(StatusCodes.FORBIDDEN); // Forbidden
+				res.send("No access")
+				return;
 			}
 
 		}
