@@ -1,2 +1,9 @@
 [
+    {
+        "message": "JavaScript is the best language in the world !",
+        "id": 9,
+        "date": "2021-12-29T08:59:56.548Z",
+        "user_id": 2,
+        "status": "published"
+    }
 ]

@@ -21,7 +21,6 @@ async function read_data(data_array, file) {
 
 	const data = await fs.readFile(file);
 	const arr = JSON.parse(data);
-	// const data_array = [];
 
 	for (var i in arr) {
 		data_array.push(arr[i]);

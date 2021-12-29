@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b00f262d-79cd-42f5-ab56-29a9cab5788f",
+		"_postman_id": "f6f3f41e-4a83-4d33-a953-7e4ee7eed3d7",
 		"name": "MTABook",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -316,7 +316,7 @@
 					"script": {
 						"exec": [
 							"pm.test('Failed Status 403', function (){",
-							"    pm.response.to.have.status(403);",
+							"    pm.response.to.have.status(401);",
 							"})"
 						],
 						"type": "text/javascript"
@@ -393,7 +393,7 @@
 					"script": {
 						"exec": [
 							"pm.test('Failed Status 403', function (){",
-							"    pm.response.to.have.status(403);",
+							"    pm.response.to.have.status(401);",
 							"})"
 						],
 						"type": "text/javascript"
@@ -433,7 +433,7 @@
 					"script": {
 						"exec": [
 							"pm.test('Failed Status 403', function (){",
-							"    pm.response.to.have.status(403);",
+							"    pm.response.to.have.status(401);",
 							"})"
 						],
 						"type": "text/javascript"
