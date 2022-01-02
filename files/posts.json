@@ -1,9 +1,1 @@
-[
-    {
-        "message": "JavaScript is the best language in the world !",
-        "id": 9,
-        "date": "2021-12-29T08:59:56.548Z",
-        "user_id": 2,
-        "status": "published"
-    }
-]
+[{"message":"JavaScript is the best language in the world !","id":0,"date":"2021-12-29T08:59:56.548Z","user_id":2,"status":"published"},{"message":"PSG is the best team in the world !","id":1,"date":"2022-01-02T12:34:44.359Z","user_id":2,"status":"deleted"},{"message":"PSG is the best team in the world !","id":2,"date":"2022-01-02T12:35:04.450Z","user_id":2,"status":"published"},{"message":"PSG is the best team in the world !","id":3,"date":"2022-01-02T12:35:16.154Z","user_id":2,"status":"published"},{"message":"PSG is the best team in the world !","id":4,"date":"2022-01-02T13:14:48.596Z","user_id":2,"status":"published"}]

@@ -67,13 +67,23 @@ function get_posts(req, res) {
 
 function delete_post(req, res) {
 	// const user_status = req.body.user.status;
+	const uesrPostId = req.body.post;
 	let writer;
+	let isPostExist = false;
+
 
 	// if (user_status === "actived") {
 	for (let i = 0; i < g_posts.length; i++) {
 		if (g_posts[i].id == req.body.post) {
 			writer = g_posts[i].user_id;
+			isPostExist = true;
 		}
+	}
+
+	if(!isPostExist){
+		res.status(StatusCodes.BAD_REQUEST);
+		res.send("Post not exists");
+		return;
 	}
 
 	if (req.body.user.id != writer) {
