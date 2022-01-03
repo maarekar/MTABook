@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f6f3f41e-4a83-4d33-a953-7e4ee7eed3d7",
+		"_postman_id": "d4574eef-8e67-47ad-ba62-d64f877b71ff",
 		"name": "MTABook",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -934,6 +934,58 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{ \"post\" : 1 }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_SERVER}}delete_post",
+					"host": [
+						"{{API_SERVER}}delete_post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Post Shai 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Success status 400', function (){",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_shai}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"post\" : 10 }",
 					"options": {
 						"raw": {
 							"language": "json"
