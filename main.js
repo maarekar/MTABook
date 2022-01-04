@@ -5,7 +5,6 @@ const post = require('./src/post.js');
 const message = require('./src/message.js');
 const admin = require('./src/admin.js');
 const user = require('./src/user.js');
-const fs = require('./src/database.js');
 
 const app = express()
 let port = 2718;

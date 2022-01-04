@@ -18,15 +18,13 @@ function delete_user_by_admin(req, res) {
 	}
 
 	const idx = users.g_users.findIndex(user => user.id == id);
-	// if (idx < 0) {
-	// 	res.status(StatusCodes.NOT_FOUND);
-	// 	res.send("No such user");
-	// 	return;
-	// }
-	check_user(idx, res);
+	if (idx < 0) {
+		res.status(StatusCodes.NOT_FOUND);
+		res.send("No such user");
+		return;
+	}
 
 	const curr_user = users.g_users[idx];
-	curr_user.status = "deleted";
 	users.g_users.splice(idx, 1);
 	users.g_tokens[users.g_id_to_tokens[curr_user.id]] = false;
 	res.send("The following user has been deleted: " + JSON.stringify({ curr_user }));
@@ -37,12 +35,11 @@ function delete_user(req, res) {
 
 	if (self_delete_id !== 1) {
 		const idx = users.g_users.findIndex(user => user.id == self_delete_id);
-		// if (idx < 0) {
-		// 	res.status(StatusCodes.NOT_FOUND);
-		// 	res.send("No such user");
-		// 	return;
-		// }
-		check_user(idx, res);
+		if (idx < 0) {
+			res.status(StatusCodes.NOT_FOUND);
+			res.send("No such user");
+			return;
+		}
 
 		users.g_tokens[req.token] = false;
 		const curr_user = users.g_users[idx];
@@ -66,14 +63,12 @@ function approve_user(req, res) {
 	const message = "Status is not 'created', can't active";
 
 	const idx = users.g_users.findIndex(user => user.id == id);
-	// if (idx < 0) {
-	// 	res.status(StatusCodes.NOT_FOUND);
-	// 	res.send("No such user")
-	// 	return;
-	// }
-	check_user(idx, res);
+	if (idx < 0) {
+		res.status(StatusCodes.NOT_FOUND);
+		res.send("No such user")
+		return;
+	}
 
-	// check_user_status(users.g_users[idx].status, res);
 	if (users.g_users[idx].status === curr_status) {
 		users.g_users[idx].status = new_status;
 
@@ -97,12 +92,12 @@ function suspend_user(req, res) {
 	const message = "Status is not 'actived', can't suspend";
 
 	const idx = users.g_users.findIndex(user => user.id == id);
-	// if (idx < 0) {
-	// 	res.status(StatusCodes.NOT_FOUND);
-	// 	res.send("No such user")
-	// 	return;
-	// }
-	check_user(idx, res);
+
+	if (idx < 0) {
+		res.status(StatusCodes.NOT_FOUND);
+		res.send("No such user")
+		return;
+	}
 
 	if (users.g_users[idx].status === curr_status) {
 		users.g_users[idx].status = new_status;
@@ -128,12 +123,12 @@ function restore_user(req, res) {
 	const message = "Status is not 'suspended', can't restore";
 
 	const idx = users.g_users.findIndex(user => user.id == id)
-	// if (idx < 0) {
-	// 	res.status(StatusCodes.NOT_FOUND);
-	// 	res.send("No such user")
-	// 	return;
-	// }
-	check_user(idx, res);
+	if (idx < 0) {
+		res.status(StatusCodes.NOT_FOUND);
+		res.send("No such user")
+		return;
+	}
+
 
 	if (users.g_users[idx].status === curr_status) {
 		users.g_users[idx].status = new_status;
@@ -178,17 +173,9 @@ function check_id(req, res, next) {
 	next();
 }
 
-function check_user(id, res) {
-	if (id < 0) {
-		res.status(StatusCodes.NOT_FOUND);
-		res.send("No such user")
-		return;
-	}
-}
-
 
 
 // export
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
-module.exports = {check_id, check_admin, delete_user_by_admin, delete_user, approve_user, suspend_user, restore_user };
+module.exports = { check_id, check_admin, delete_user_by_admin, delete_user, approve_user, suspend_user, restore_user };

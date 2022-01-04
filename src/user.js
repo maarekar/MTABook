@@ -20,7 +20,7 @@ const g_id_to_tokens = [];
 const users_file = './files/users.json';
 
 db.read_data(g_users, users_file).then(
-	() => { console.log('Done reading users') }
+	() => { }
 ).catch(reason => console.log('Failure:' + reason))
 
 function list_users(req, res) {
@@ -46,7 +46,7 @@ function log_in(req, res) {
 		else {
 			message = "No access";
 		}
-		res.status(StatusCodes.UNAUTHORIZED); 
+		res.status(StatusCodes.UNAUTHORIZED);
 		res.send(message)
 		return;
 	}
@@ -155,19 +155,4 @@ function check_validation_token(req, res, next) {
 	});
 }
 
-// function check_activate_authorization(req, res, next) { 
-// 	const user_status = req.body.user.status;
-// 	if (user_status === "actived") {
-// 		next();
-// 	}
-// 	else {
-// 		res.status(StatusCodes.UNAUTHORIZED); 
-// 		res.send("No access, reason is one of the following: \n 1.Register \n 2.Wait for activation \n 3.Refresh the token by Logout and Login again please");
-// 		return;
-// 	}
-// }
-
-
-
-
-module.exports = {users_file, g_users, g_tokens, g_id_to_tokens, list_users, verifyToken, check_validation_token, log_in, log_out, register };
+module.exports = { users_file, g_users, g_tokens, g_id_to_tokens, list_users, verifyToken, check_validation_token, log_in, log_out, register };
